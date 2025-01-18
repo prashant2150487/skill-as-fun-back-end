@@ -1,21 +1,12 @@
-import express from "express";
+import express, { Request, Response } from "express";
+import { connectDB } from "./config/database/mongoose.config";
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 
-// Routes
-app.get("/", (req, res) => {
-  res.send("Welcome to your Express.js app with TypeScript!");
-});
-const startServer=async ()=>{
-  try{
-    // await connectDB();
-  }catch(error){
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  }
-}
 
-export default app;
+connectDB();
+
+export default app 
