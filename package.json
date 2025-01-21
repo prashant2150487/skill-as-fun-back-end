@@ -1,0 +1,23 @@
+{
+  "name": "skill-as-fun-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/prashant2150487/skill-as-fun-back-end.git",
+  "author": "Prashant Sachan <p-prashantsachan@goodearth.in>",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5"
+  },
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
