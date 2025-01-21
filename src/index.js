@@ -16,7 +16,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "Something went wrong!" });
 });
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 app.use("/api", (req, res) => {
   res.send("Welcome to the API");
 });
