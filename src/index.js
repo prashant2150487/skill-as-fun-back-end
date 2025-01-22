@@ -2,9 +2,11 @@ import express from "express";
 import connectDB from "./config/database.js";
 import authRoutes from "./routes/authRoutes.js";
 import cors from "cors";
+import dotenv from "dotenv";
 
 // Initialize the app
 const app = express();
+dotenv.config();
 app.use(cors({
   origin: "*", // Replace '*' with your client domain if needed for security
   methods: "GET,POST,PUT,DELETE",
