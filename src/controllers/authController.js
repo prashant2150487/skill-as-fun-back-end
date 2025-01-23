@@ -2,7 +2,7 @@ import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 export const signup = async (req, res) => {
   try {
-    const { email, password, name } = req.body;
+    const { childName, guardianName, whatsUpNo, email } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -12,9 +12,10 @@ export const signup = async (req, res) => {
 
     // Create new user
     const user = new User({
+      childName,
+      guardianName,
+      whatsUpNo,
       email,
-      password,
-      name,
     });
 
     await user.save();
@@ -29,8 +30,10 @@ export const signup = async (req, res) => {
       token,
       user: {
         id: user._id,
+        childName: user.childName,
+        guardianName: user.guardianName,
+        whatsUpNo: user.whatsUpNo,
         email: user.email,
-        name: user.name,
       },
     });
   } catch (error) {
