@@ -26,7 +26,7 @@ export const signup = async (req, res) => {
     });
 
     res.status(201).json({
-      message: "User created successfully",
+      message: "Congratulations! Your demo has been successfully scheduled.",
       token,
       user: {
         id: user._id,
