@@ -5,7 +5,8 @@ export const createQuiz = async (req, res) => {
   const { title, description } = req.body;
 
   try {
-    const quiz = await Quiz.create({ title, description, questions: [] });
+    const newQuiz = await Quiz.create({ title, description, questions: [] });
+    console.log(newQuiz);
 
     res.status(201).json({
       message: "Quiz created successfully",

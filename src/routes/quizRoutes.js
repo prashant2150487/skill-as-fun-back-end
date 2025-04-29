@@ -5,7 +5,7 @@ import {
   submitAnswers,
 } from "../controllers/quizController.js";
 const router = express.Router();
-router.post("/quizzes", createQuiz);
+router.post("/quizzes/createQuiz", createQuiz);
 router.post("/quizzes/:quizId/question", addQuestion);
 // router.get("/quizzes/:quizId/questions",fetchQuestion")
 router.post("/quizzes/:quizId/submit", submitAnswers);
