@@ -1,24 +1,29 @@
 import express from "express";
 import connectDB from "./config/database.js";
 import authRoutes from "./routes/authRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
+import scoreRoutes from "./routes/scoreRoutes.js";
 import cors from "cors";
 import dotenv from "dotenv";
 
 // Initialize the app
 const app = express();
 dotenv.config();
-app.use(cors({
-  origin: "*", // Replace '*' with your client domain if needed for security
-  methods: "GET,POST,PUT,DELETE",
-  allowedHeaders: "Content-Type,Authorization"
-}))
+app.use(
+  cors({
+    origin: "*", // Replace '*' with your client domain if needed for security
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
+  })
+);
 // Database connection
 connectDB();
 app.use(express.json());
 
-
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api", scoreRoutes);
+app.use("/api", quizRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
