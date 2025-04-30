@@ -1,12 +1,32 @@
+import question from "../models/question.js";
 import Quiz from "../models/quiz.js";
 
 // Create a new quiz
 export const createQuiz = async (req, res) => {
-  const { title, description } = req.body;
+  let { title, description, category } = req.body;
 
   try {
-    const newQuiz = await Quiz.create({ title, description, questions: [] });
-    console.log(newQuiz);
+    if (!title || !description || !category) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    // Trim input fields
+    title = title?.trim();
+
+    // Check if a quiz with the same title already exists (case-insensitive)
+    const existingQuiz = await Quiz.findOne({
+      title: new RegExp(`^${title}$`, "i"),
+    });
+    if (existingQuiz) {
+      return res
+        .status(409)
+        .json({ message: "Quiz with this title already exists" });
+    }
+    const newQuiz = await Quiz.create({
+      title,
+      description,
+      category,
+      questions: [],
+    });
 
     res.status(201).json({
       message: "Quiz created successfully",
@@ -15,9 +35,11 @@ export const createQuiz = async (req, res) => {
         title: newQuiz.title,
         description: newQuiz.description,
         questions: newQuiz.questions,
+        category: newQuiz.category,
       },
     });
   } catch (error) {
+    console.error("Error creating quiz:", error);
     res
       .status(500)
       .json({ message: "Error creating quiz", error: error.message });
@@ -27,28 +49,22 @@ export const createQuiz = async (req, res) => {
 // Add a question to a quiz
 export const addQuestion = async (req, res) => {
   try {
-    const quizId = req.params.quizId;
+    const { quizId } = req.params;
     const { text, options, correctIndex } = req.body;
     const quiz = await Quiz.findById(quizId);
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
-    const question = {
+    const newQuestion = await question.create({
+      quizId,
       text,
       options,
       correctIndex,
-    };
-    quiz.questions.push(question);
-    await quiz.save();
-    const addedQuestion = quiz.questions[quiz.questions.length - 1];
+    });
+    
     res.status(201).json({
       message: "Question added successfully",
-      question: {
-        id: addedQuestion._id,
-        text: addedQuestion.text,
-        options: addedQuestion.options,
-        correctIndex: addedQuestion.correctIndex,
-      },
+      question: newQuestion,
     });
   } catch (error) {
     res
@@ -73,22 +89,21 @@ export const submitAnswers = async (req, res) => {
         score++;
       }
     });
-    const savesScore= await score.create({
-        quizId,
-        userId,
-        score,
-        totalQuestions: quiz.questions.length,
-      
-    })
+    const savesScore = await score.create({
+      quizId,
+      userId,
+      score,
+      totalQuestions: quiz.questions.length,
+    });
     res.status(200).json({
       message: "Answers submitted successfully",
-        score: {
-            userId,
-            quizId,
-            score,
-            totalQuestions: quiz.questions.length,
-            takenAt: savedScore.takenAt
-        },
+      score: {
+        userId,
+        quizId,
+        score,
+        totalQuestions: quiz.questions.length,
+        takenAt: savedScore.takenAt,
+      },
     });
   } catch (error) {
     res

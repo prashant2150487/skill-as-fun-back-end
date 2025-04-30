@@ -6,7 +6,7 @@ import {
 } from "../controllers/quizController.js";
 const router = express.Router();
 router.post("/quizzes/createQuiz", createQuiz);
-router.post("/quizzes/:quizId/question", addQuestion);
+router.post("/quizzes/:quizId/addQuestion", addQuestion);
 // router.get("/quizzes/:quizId/questions",fetchQuestion")
 router.post("/quizzes/:quizId/submit", submitAnswers);
 export default router;
