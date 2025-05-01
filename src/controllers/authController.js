@@ -146,3 +146,22 @@ export const updateUser = async (req, res) => {
       .json({ message: "Error updating user", error: error.message });
   }
 };
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Find user by ID
+    const user = await User.find({ id });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Delete user
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error.message);
+    res
+      .status(500)
+      .json({ message: "Error deleting user", error: error.message });
+      
+  }
+};
