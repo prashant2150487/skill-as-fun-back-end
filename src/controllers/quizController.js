@@ -45,6 +45,32 @@ export const createQuiz = async (req, res) => {
       .json({ message: "Error creating quiz", error: error.message });
   }
 };
+// Get all quizzes
+export const getAllQuizzes = async (req, res) => {
+  try {
+    const quizzes = await Quiz.find();
+    if (!quizzes || quizzes.length === 0) {
+      return res.stats(404).json({
+        message: "No quizzes found",
+      });
+    }
+    res.status(200).json({
+      message: "Quizzes fetched successfully",
+      quizzes: quizzes.map((quiz) => ({
+        id: quiz._id,
+        title: quiz.title,
+        description: quiz.description,
+        category: quiz.category,
+        questions: quiz.questions,
+      })),
+    });
+  } catch (error) {
+    console.log("Error fetching quizzes:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching quizzes", error: error.message });
+  }
+};
 
 // Add a question to a quiz
 export const addQuestion = async (req, res) => {
@@ -61,7 +87,7 @@ export const addQuestion = async (req, res) => {
       options,
       correctIndex,
     });
-    
+
     res.status(201).json({
       message: "Question added successfully",
       question: newQuestion,
