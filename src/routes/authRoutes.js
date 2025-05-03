@@ -2,6 +2,7 @@ import express from "express";
 import {
   deleteUser,
   getAllUsers,
+  getMe,
   login,
   signup,
   updateUser,
@@ -12,8 +13,9 @@ const router = express.Router();
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.get("/getAllUsers", getAllUsers);
+router.get("/getAllUsers", authenticateToken, getAllUsers);
 router.put("/updateUser/:id", updateUser);
 router.delete("/deleteUser/:id", deleteUser);
+router.get("/meta/user", authenticateToken, getMe);
 
 export default router;

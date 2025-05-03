@@ -165,3 +165,31 @@ export const deleteUser = async (req, res) => {
       
   }
 };
+
+// GET /api/me
+// Get current user
+// This route is protected and requires authentication
+// Middleware to authenticate token
+export const getMe = async (req, res) => {
+  console.log(req.user.id,"-====")
+  try {
+    const user = await User.findById(req.user.id).select("-password -__v");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({
+      message: "User fetched successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching user:", error.message);
+    res
+      .status(500)
+      .json({ message: "Error fetching user", error: error.message });
+  }
+};
