@@ -1,5 +1,6 @@
 import Quiz from "../models/quiz.js";
 import Question from "../models/question.js";
+import quiz from "../models/quiz.js";
 // Create a new quiz
 export const createQuiz = async (req, res) => {
   let { title, description, category } = req.body;
@@ -97,13 +98,36 @@ export const addQuestion = async (req, res) => {
       .json({ message: "Error adding question", error: error.message });
   }
 };
+export const deleteQuiz = async (req, res) => {
+  try {
+    const quizId = req.params.quizId;
+
+    const deletedQuiz = await Quiz.findByIdAndDelete(quizId);
+
+    if (!deletedQuiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    res.status(200).json({
+      message: "Quiz deleted successfully",
+      quiz: deletedQuiz,
+    });
+  } catch (error) {
+    console.error("Error deleting quiz:", error);
+    res.status(500).json({
+      message: "Error deleting quiz",
+      error: error.message,
+    });
+  }
+};
+
 export const getAllQuestion = async (req, res) => {
   try {
     const questions = await Question.find();
     res.status(200).json({
       message: "Questions fetched successfully",
-      questions
-    })
+      questions,
+    });
   } catch (error) {
     console.error("Error fetching question:", error);
     res
