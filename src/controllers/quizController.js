@@ -1,6 +1,5 @@
-import question from "../models/question.js";
 import Quiz from "../models/quiz.js";
-
+import Question from "../models/question.js";
 // Create a new quiz
 export const createQuiz = async (req, res) => {
   let { title, description, category } = req.body;
@@ -96,6 +95,20 @@ export const addQuestion = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error adding question", error: error.message });
+  }
+};
+export const getAllQuestion = async (req, res) => {
+  try {
+    const questions = await Question.find();
+    res.status(200).json({
+      message: "Questions fetched successfully",
+      questions
+    })
+  } catch (error) {
+    console.error("Error fetching question:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching question", error: error.message });
   }
 };
 // Submit answers

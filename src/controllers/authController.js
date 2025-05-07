@@ -162,7 +162,6 @@ export const deleteUser = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error deleting user", error: error.message });
-      
   }
 };
 
@@ -171,7 +170,7 @@ export const deleteUser = async (req, res) => {
 // This route is protected and requires authentication
 // Middleware to authenticate token
 export const getMe = async (req, res) => {
-  console.log(req.user.id,"-====")
+  console.log(req.user.id, "-====");
   try {
     const user = await User.findById(req.user.id).select("-password -__v");
     if (!user) {
