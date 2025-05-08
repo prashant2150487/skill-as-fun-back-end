@@ -71,6 +71,30 @@ export const getAllQuizzes = async (req, res) => {
       .json({ message: "Error fetching quizzes", error: error.message });
   }
 };
+//get quiz
+export const getQuiz = async (req, res) => {
+  try {
+    const quizId = req.params.quizId;
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      return res.stats(404).json({ message: "Quiz not found" });
+    }
+    const questions= await Question.find({quizId})
+    
+
+    res.status(200).json({
+      message: "Quiz fetched successfully",
+      quiz,
+      questions 
+      
+    });
+  } catch (error) {
+    console.log("Error fetching quizzes:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching quizzes", error: error.message });
+  }
+};
 
 // Add a question to a quiz
 export const addQuestion = async (req, res) => {
@@ -81,7 +105,7 @@ export const addQuestion = async (req, res) => {
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
-    const newQuestion = await question.create({
+    const newQuestion = await Question.create({
       quizId,
       text,
       options,
