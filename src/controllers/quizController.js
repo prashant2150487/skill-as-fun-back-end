@@ -54,15 +54,21 @@ export const getAllQuizzes = async (req, res) => {
         message: "No quizzes found",
       });
     }
+    const quizzesWithQuestions = await Promise.all(
+      quizzes.map(async (quiz) => {
+        const questions = await Question.find({ quizId: quiz.id });
+        return {
+          id: quiz._id,
+          title: quiz.title,
+          description: quiz.description,
+          category: quiz.category,
+          questions,
+        };
+      })
+    );
     res.status(200).json({
       message: "Quizzes fetched successfully",
-      quizzes: quizzes.map((quiz) => ({
-        id: quiz._id,
-        title: quiz.title,
-        description: quiz.description,
-        category: quiz.category,
-        questions: quiz.questions,
-      })),
+      quizzes: quizzesWithQuestions,
     });
   } catch (error) {
     console.log("Error fetching quizzes:", error);
@@ -79,14 +85,12 @@ export const getQuiz = async (req, res) => {
     if (!quiz) {
       return res.stats(404).json({ message: "Quiz not found" });
     }
-    const questions= await Question.find({quizId})
-    
+    const questions = await Question.find({ quizId });
 
     res.status(200).json({
       message: "Quiz fetched successfully",
       quiz,
-      questions 
-      
+      questions,
     });
   } catch (error) {
     console.log("Error fetching quizzes:", error);
