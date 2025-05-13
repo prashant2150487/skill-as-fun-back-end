@@ -149,9 +149,11 @@ export const deleteQuiz = async (req, res) => {
   }
 };
 
-export const getAllQuestion = async (req, res) => {
+export const getAllQuestions = async (req, res) => {
   try {
-    const questions = await Question.find();
+    const quizId = req.params.quizId;
+    const questions = await Question.find({ quizId });
+
     res.status(200).json({
       message: "Questions fetched successfully",
       questions,

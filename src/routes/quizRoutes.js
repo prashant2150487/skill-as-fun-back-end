@@ -3,6 +3,7 @@ import {
   addQuestion,
   createQuiz,
   deleteQuiz,
+  getAllQuestions,
   getAllQuizzes,
   getQuiz,
   submitAnswers,
@@ -15,4 +16,5 @@ router.post("/quizzes/:quizId/addQuestion", addQuestion);
 router.delete("/quizzes/:quizId",deleteQuiz)
 // router.get("/quizzes/:quizId/questions",fetchQuestion")
 router.post("/quizzes/:quizId/submit", submitAnswers);
+router.get("/quizzes/:quizId/getQuestion",getAllQuestions)
 export default router;
