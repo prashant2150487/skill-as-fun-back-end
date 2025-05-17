@@ -16,6 +16,6 @@ router.get("/quizzes/:quizId", getQuiz);
 router.post("/quizzes/:quizId/addQuestion", addQuestion);
 router.delete("/quizzes/:quizId",deleteQuiz)
 // router.get("/quizzes/:quizId/questions",fetchQuestion")
-router.post("quizzes/:quizId/submitAnswers", authenticateToken , submitAnswers);
+router.post("/quizzes/:quizId/submitAnswers", authenticateToken , submitAnswers);
 router.get("/quizzes/:quizId/getQuestion",getAllQuestions)
 export default router;

@@ -1,6 +1,7 @@
 import Quiz from "../models/quiz.js";
 import Question from "../models/question.js";
 import quiz from "../models/quiz.js";
+import Score from "../models/score.js"
 // Create a new quiz
 export const createQuiz = async (req, res) => {
   let { title, description, category } = req.body;
@@ -170,23 +171,23 @@ export const submitAnswers = async (req, res) => {
   try {
     const quizId = req.params.quizId;
     const { answers } = req.body;
-    const userId = req.user._id ; // In real case, extract from session/token
+    const userId = req.user.id ; // In real case, extract from session/token
     const quiz = await Quiz.findById(quizId);
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
     let score = 0;
-    answers.forEach((ans) => {
+    answers?.forEach((ans) => {
       const question = quiz.questions.id(ans.questionId);
       if (question && question.correctIndex === ans.selectedIndex) {
         score++;
       }
     });
-    const savedScore = await score.create({
+    const savedScore = await Score.create({
       quizId,
       userId,
       score,
-      totalQuestions: quiz.questions.length,
+      totalQuestions: quiz?.questions?.length || 0,
     });
     res.status(200).json({
       message: "Answers submitted successfully",
@@ -194,7 +195,7 @@ export const submitAnswers = async (req, res) => {
         userId,
         quizId,
         score,
-        totalQuestions: quiz.questions.length,
+        totalQuestions: quiz.questions?.length,
         takenAt: savedScore.takenAt,
       },
     });
