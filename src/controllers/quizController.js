@@ -170,7 +170,7 @@ export const submitAnswers = async (req, res) => {
   try {
     const quizId = req.params.quizId;
     const { answers } = req.body;
-    const userId = "dummyUserId"; // In real case, extract from session/token
+    const userId = req.user._id ; // In real case, extract from session/token
     const quiz = await Quiz.findById(quizId);
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
@@ -182,7 +182,7 @@ export const submitAnswers = async (req, res) => {
         score++;
       }
     });
-    const savesScore = await score.create({
+    const savedScore = await score.create({
       quizId,
       userId,
       score,
@@ -199,6 +199,8 @@ export const submitAnswers = async (req, res) => {
       },
     });
   } catch (error) {
+
+    console.error(error);
     res
       .status(500)
       .json({ message: "Error submitting answers", error: error.message });

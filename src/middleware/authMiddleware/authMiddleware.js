@@ -15,7 +15,7 @@ const authenticateToken = (req, res, next) => {
     next();
   } catch (err) {
     console.error(err);
-    res.status(401).json({ message: "Token is not valid" });
+    res.status(401).json({ message: "Not authorized, token invalid" });
   }
 };
 export default authenticateToken;

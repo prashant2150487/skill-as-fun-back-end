@@ -64,8 +64,6 @@ export const login = async (req, res) => {
     }
 
     // Check password
-    console.log(password);
-    console.log(user.password);
     const isMatch = await bcryptjs.compare(password, user.password);
     console.log(isMatch);
     if (!isMatch) {
@@ -76,6 +74,7 @@ export const login = async (req, res) => {
     const payload = {
       id: user._id,
       role: user.role,
+      email: user.email,
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
