@@ -132,7 +132,6 @@ export const deleteQuestion = async (req, res) => {
     const questionId = req.params.questionId;
     const deletedQuestion = await Question.findByIdAndDelete(questionId);
     if (!deletedQuestion) {
-
       return res.status(404).json({
         message: "Question not found",
       });
@@ -200,13 +199,17 @@ export const submitAnswers = async (req, res) => {
     const questions = await Question.find({ quizId });
 
     if (!questions || questions.length === 0) {
-      return res.status(404).json({ message: "No questions found for this quiz" });
+      return res
+        .status(404)
+        .json({ message: "No questions found for this quiz" });
     }
 
     let score = 0;
     answers?.forEach((ans) => {
       // Find the question by ID
-      const question = questions.find(q => q._id.toString() === ans.questionId);
+      const question = questions.find(
+        (q) => q._id.toString() === ans.questionId
+      );
       if (question && question.correctIndex === ans.selectedIndex) {
         score++;
       }
@@ -215,10 +218,9 @@ export const submitAnswers = async (req, res) => {
     const savedScore = await Score.create({
       quizId,
       userId,
-      score:score,
+      score: score,
       totalQuestions: questions.length,
     });
-    console.log(savedScore);
 
     res.status(200).json({
       message: "Answers submitted successfully",
