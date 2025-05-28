@@ -2,6 +2,7 @@ import express from "express";
 import {
   addQuestion,
   createQuiz,
+  deleteQuestion,
   deleteQuiz,
   getAllQuestions,
   getAllQuizzes,
@@ -14,8 +15,9 @@ router.post("/quizzes/createQuiz", createQuiz);
 router.get("/quizzes/getAllQuizzes", getAllQuizzes);
 router.get("/quizzes/:quizId", getQuiz);
 router.post("/quizzes/:quizId/addQuestion", addQuestion);
-router.delete("/quizzes/:quizId",deleteQuiz)
+router.delete("/quizzes/:quizId", deleteQuiz);
 // router.get("/quizzes/:quizId/questions",fetchQuestion")
-router.post("/quizzes/:quizId/submitAnswers", authenticateToken , submitAnswers);
-router.get("/quizzes/:quizId/getQuestion",getAllQuestions)
+router.post("/quizzes/:quizId/submitAnswers", authenticateToken, submitAnswers);
+router.get("/quizzes/:quizId/getQuestion", getAllQuestions);
+router.delete("/quizzes/:questionId", authenticateToken, deleteQuestion);
 export default router;

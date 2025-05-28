@@ -1,7 +1,7 @@
 import Quiz from "../models/quiz.js";
 import Question from "../models/question.js";
 import quiz from "../models/quiz.js";
-import Score from "../models/score.js"
+import Score from "../models/score.js";
 // Create a new quiz
 export const createQuiz = async (req, res) => {
   let { title, description, category } = req.body;
@@ -127,6 +127,29 @@ export const addQuestion = async (req, res) => {
       .json({ message: "Error adding question", error: error.message });
   }
 };
+export const deleteQuestion = async (req, res) => {
+  try {
+    const questionId = req.params.questionId;
+    const deletedQuestion = await Question.findByIdAndDelete(questionId);
+    if (!deletedQuestion) {
+
+      return res.status(404).json({
+        message: "Question not found",
+      });
+    }
+    res.status(200).json({
+      message: "Question deleted successfully",
+      question: deletedQuestion,
+    });
+  } catch (error) {
+    console.error("Error deleting question:", error);
+    res.status(500).json({
+      message: "Error deleting question",
+      error: error.message,
+    });
+  }
+};
+
 export const deleteQuiz = async (req, res) => {
   try {
     const quizId = req.params.quizId;
@@ -171,36 +194,43 @@ export const submitAnswers = async (req, res) => {
   try {
     const quizId = req.params.quizId;
     const { answers } = req.body;
-    const userId = req.user.id ; // In real case, extract from session/token
-    const quiz = await Quiz.findById(quizId);
-    if (!quiz) {
-      return res.status(404).json({ message: "Quiz not found" });
+    const userId = req.user.id; // In real case, extract from session/token
+
+    // Fetch all questions for this quiz
+    const questions = await Question.find({ quizId });
+
+    if (!questions || questions.length === 0) {
+      return res.status(404).json({ message: "No questions found for this quiz" });
     }
+
     let score = 0;
     answers?.forEach((ans) => {
-      const question = quiz.questions.id(ans.questionId);
+      // Find the question by ID
+      const question = questions.find(q => q._id.toString() === ans.questionId);
       if (question && question.correctIndex === ans.selectedIndex) {
         score++;
       }
     });
+
     const savedScore = await Score.create({
       quizId,
       userId,
-      score,
-      totalQuestions: quiz?.questions?.length || 0,
+      score:score,
+      totalQuestions: questions.length,
     });
+    console.log(savedScore);
+
     res.status(200).json({
       message: "Answers submitted successfully",
       score: {
         userId,
         quizId,
         score,
-        totalQuestions: quiz.questions?.length,
+        totalQuestions: questions.length,
         takenAt: savedScore.takenAt,
       },
     });
   } catch (error) {
-
     console.error(error);
     res
       .status(500)
