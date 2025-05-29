@@ -3,6 +3,7 @@ import connectDB from "./config/database.js";
 import authRoutes from "./routes/authRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import scoreRoutes from "./routes/scoreRoutes.js";
+import businessRoutes from "./routes/businessRoutes.js"
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api", scoreRoutes);
 app.use("/api", quizRoutes);
+app.use("/api", businessRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
