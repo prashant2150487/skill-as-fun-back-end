@@ -29,7 +29,7 @@ export const registerForBusiness= async (req, res) => {
 
     return res.status(201).json({
       message: "Business info saved successfully",
-      data: business,
+      // data: business,
     });
   } catch (err) {
     console.log(err);
