@@ -1,18 +1,19 @@
 import mongoose from "mongoose";
 
-const announcementSchema = new mongoose.schema(
+const announcementSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: [true, "Title is required"],
       trim: true,
+      unique: true,
     },
     content: {
       type: String,
       required: [true, "Content is required"],
     },
     targetAudience: {
-      title: String,
+      type: [String], // It's an array of strings
       enum: ["all", "students", "teachers", "parents"],
       default: ["all"],
     },
@@ -31,9 +32,11 @@ const announcementSchema = new mongoose.schema(
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: [true],
+      // required: true,
     },
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("Announcement", announcementSchema);
+
+const Announcement = mongoose.model("Announcement", announcementSchema);
+export default Announcement;
