@@ -43,7 +43,26 @@ export const createAnnouncement = async (req, res) => {
     });
   }
 };
-export const getAllAnnouncementForAdmin = async (req, res) => {};
+export const getAllAnnouncementForAdmin = async (req, res) => {
+  try {
+    const announcements = await Announcement.find();
+    if (!announcements || announcements.length === 0) {
+      res.status(404).json({
+        message: "no announcements found",
+      });
+    }
+    res.status(200).json({
+      message: "announcement fetched successfully",
+      announcements,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error fetching announcements",
+      error: error?.message,
+    });
+  }
+};
 export const getActiveAnnouncementForClient = async (req, res) => {};
 export const updateAnnouncement = async (req, res) => {};
 export const deleteAnnouncement = async (req, res) => {};
