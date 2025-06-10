@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/", authenticateToken, adminOnly, createAnnouncement);
 router.get("/active", getActiveAnnouncementForClient);
-router.get("/all", getAllAnnouncementForAdmin);
+router.get("/all", authenticateToken, adminOnly, getAllAnnouncementForAdmin);
 router.put("/:id", updateAnnouncement);
 router.delete("/:id", deleteAnnouncement);
 
