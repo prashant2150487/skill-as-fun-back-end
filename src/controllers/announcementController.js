@@ -2,6 +2,7 @@ import Announcement from "../models/announcementBar.js";
 
 export const createAnnouncement = async (req, res) => {
   try {
+    console.log(req.user.id,"ID-------")
     const { title, content, targetAudience, startDate, endDate } = req.body;
     //validation
     if (!title || !content || !targetAudience || !startDate || !endDate) {
@@ -27,14 +28,13 @@ export const createAnnouncement = async (req, res) => {
       targetAudience,
       startDate: parsedStartDate,
       endDate: parsedEndDate,
-      // author: req.user.id,
+      author: req.user.id,
     });
     const announcement = await newAnnouncement.save();
     res.status(201).json({
       message: "Announcement created successfully",
       announcement,
     });
-    console.log(title, content, targetAudience, startDate, endDate);
   } catch (error) {
     console.log(error);
     res.status(500).json({
