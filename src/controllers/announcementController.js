@@ -1,8 +1,9 @@
+import mongoose from "mongoose";
 import Announcement from "../models/announcementBar.js";
 
 export const createAnnouncement = async (req, res) => {
   try {
-    console.log(req.user.id,"ID-------")
+    console.log(req.user.id, "ID-------");
     const { title, content, targetAudience, startDate, endDate } = req.body;
     //validation
     if (!title || !content || !targetAudience || !startDate || !endDate) {
@@ -83,5 +84,58 @@ export const getActiveAnnouncementForClient = async (req, res) => {
     });
   }
 };
-export const updateAnnouncement = async (req, res) => {};
-export const deleteAnnouncement = async (req, res) => {};
+const isValidMongoId = (id) => mongoose.Types.ObjectId.isValid(id);
+export const updateAnnouncement = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Validate ID
+    if (!id || !isValidMongoId(id)) {
+      return res.status(400).json({
+        message: "Invalid announcement ID",
+      });
+    }
+    const announcement = await Announcement.findByIdAndUpdate(id);
+    if (!announcement) {
+      return res.status(404).json({
+        message: "announcement not found",
+      });
+    }
+    res.status(200).json({
+      message: "announcement updated successfully",
+      announcement,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Error updating announcement",
+      error: err?.message,
+    });
+  }
+};
+export const deleteAnnouncement = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Validate ID
+    if (!id || !isValidMongoId(id)) {
+      return res.status(400).json({
+        message: "Invalid announcement ID",
+      });
+    }
+    const announcement = await Announcement.findByIdAndDelete(id);
+    if (!announcement) {
+      return res.status(404).json({
+        message: "Announcement not found",
+      });
+    }
+    res.status(200).json({
+      message: "Announcement deleted successfully",
+      data: { id },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error deleting announcement",
+      error: err?.message,
+    });
+  }
+};
