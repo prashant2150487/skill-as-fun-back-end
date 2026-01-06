@@ -1,7 +1,7 @@
 import Business from "../models/business.js";
 import Demo from "../models/demo.js";
 
-export const registerForBusiness= async (req, res) => {
+export const registerForBusiness = async (req, res) => {
   try {
     const { firstName, lastName, email, organization, message } = req.body;
     if (!firstName || !lastName || !email || !organization || !message) {
@@ -42,8 +42,8 @@ export const registerForBusiness= async (req, res) => {
 };
 export const registerForDemo = async (req, res) => {
   try {
-    const { childName, guardianName, whatsAppNumber, email } = req.body;
-    if (!childName || !guardianName || !whatsAppNumber || !email) {
+    const { childName, guardianName, whatsAppNumber, email, bookingDate, childAge } = req.body;
+    if (!guardianName || !whatsAppNumber || !email || !bookingDate) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -62,6 +62,8 @@ export const registerForDemo = async (req, res) => {
       guardianName,
       whatsAppNumber,
       email,
+      bookingDate,
+      childAge,
     });
 
     await demo.save();
@@ -78,3 +80,21 @@ export const registerForDemo = async (req, res) => {
     });
   }
 };
+
+export const getDemo = async (req, res) => {
+
+  try {
+    const demo = await Demo.find()
+    return res.status(200).json({
+      message: "Demo registration successful",
+      data: demo
+    })
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: err.message,
+    });
+  }
+}

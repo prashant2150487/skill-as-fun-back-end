@@ -27,6 +27,25 @@ const demoSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    bookingDate:{
+      type: Date,
+      required: [true, "Booking date is required"],
+      trim: true,
+      default: Date.now,
+      validate: {
+        validator: function (v) {
+          return v >= Date.now();
+        },
+        message: "Booking date must be in the future",
+      },
+
+    },
+    childAge:{
+      type:String,
+      trim: true,
+      
+    }
+
   },
   { timestamps: true }
 );
