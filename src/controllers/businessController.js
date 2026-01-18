@@ -48,6 +48,7 @@ export const registerForDemo = async (req, res) => {
         message: "All fields are required",
       });
     }
+    
 
     // Check if a demo registration with the same email already exists (optional)
     // const existingDemo = await Demo.findOne({ email });
@@ -68,12 +69,14 @@ export const registerForDemo = async (req, res) => {
     return res.status(201).json({
       message: "Demo registration successful",
       data: demo,
+      success: true
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       message: "Internal server error",
       error: err.message,
+      success: false
     });
   }
 };
