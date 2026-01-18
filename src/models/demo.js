@@ -4,7 +4,7 @@ const demoSchema = new mongoose.Schema(
   {
     childName: {
       type: String,
-      required: [true, "Child's name is required"],
+      // required: [true, "Child's name is required"],
       trim: true,
     },
     guardianName: {
@@ -14,12 +14,12 @@ const demoSchema = new mongoose.Schema(
     },
     whatsAppNumber: {
       type: String,
-      required: [true, "WhatsApp number is required"],
+      // required: [true, "WhatsApp number is required"],
       trim: true,
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      // required: [true, "Email is required"],
       match: [
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         "Please enter a valid email address",
@@ -29,22 +29,29 @@ const demoSchema = new mongoose.Schema(
     },
     bookingDate:{
       type: Date,
-      required: [true, "Booking date is required"],
+      // required: [true, "Booking date is required"],
       trim: true,
       default: Date.now,
-      validate: {
-        validator: function (v) {
-          return v >= Date.now();
-        },
-        message: "Booking date must be in the future",
-      },
+      // validate: {
+      //   validator: function (v) {
+      //     return v >= Date.now();
+      //   },
+      //   message: "Booking date must be in the future",
+      // },
 
     },
     childAge:{
       type:String,
       trim: true,
       
+    },
+    studentClass:{
+      type:String,
+      trim: true,
+
     }
+
+
 
   },
   { timestamps: true }

@@ -42,28 +42,25 @@ export const registerForBusiness = async (req, res) => {
 };
 export const registerForDemo = async (req, res) => {
   try {
-    const { childName, guardianName, whatsAppNumber, email, bookingDate, childAge } = req.body;
-    if (!guardianName || !whatsAppNumber || !email || !bookingDate) {
+    const { guardianName, whatsAppNumber, studentClass } = req.body;
+    if (!guardianName || !whatsAppNumber || !studentClass) {
       return res.status(400).json({
         message: "All fields are required",
       });
     }
 
     // Check if a demo registration with the same email already exists (optional)
-    const existingDemo = await Demo.findOne({ email });
-    if (existingDemo) {
-      return res.status(409).json({
-        message: "Demo registration with this email already exists",
-      });
-    }
+    // const existingDemo = await Demo.findOne({ email });
+    // if (existingDemo) {
+    //   return res.status(409).json({
+    //     message: "Demo registration with this email already exists",
+    //   });
+    // }
 
     const demo = new Demo({
-      childName,
       guardianName,
       whatsAppNumber,
-      email,
-      bookingDate,
-      childAge,
+      studentClass,
     });
 
     await demo.save();
